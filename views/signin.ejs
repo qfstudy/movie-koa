@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>管理后台</title>
+</head>
+<link rel="stylesheet" href="../css/semantic.min.css">
+<script src="../js/jquery-3.4.1.min.js"></script>
+<script src="../js/semantic.min.js"></script>
+
+<body>
+	<style>
+		img {
+			width: 50px;
+		}
+
+		.right .item {
+			margin: 0 -0.5em !important;
+		}
+
+		th,
+		td {
+			text-align: center !important;
+		}
+	</style>
+	<div class="ui inverted segment" style="margin-top: 0;">
+		<div class="ui inverted secondary menu">
+			<a class="item" href="/">Home</a>
+			<a class="item" href="/upload">上传数据</a>
+			<a target="__blank" href="" class="item">GitHub</a>
+		</div>
+	</div>
+	<form class="ui form segment" method="post" action="/signin" style="width: 30%;margin: 0 auto;">
+		<div class="field">
+			<label>用户名</label>
+			<input type="text" name="userName" placeholder="用户名">
+		</div>
+		<div class="field">
+			<label>密码</label>
+			<input type="password" name="password" placeholder="密码">
+		</div>
+		<button class="ui fluid primary button" type="submit">登录</button>
+	</form>
+	<script>
+		$(function () {
+			$('.ui.dropdown').dropdown()
+			$('.ui.form')
+				.form({
+					inline: true,
+					on: 'blur',
+					fields: {
+						userName: {
+							identifier: 'userName',
+							rules: [{
+								type: 'empty',
+								prompt: '请输入用户名！'
+							}]
+						},
+						password: {
+							identifier: 'password',
+							rules: [{
+								type: 'empty',
+								prompt: '请输入密码！'
+							}]
+						}
+					}
+				});
+		})
+	</script>
+	<% include footer %>

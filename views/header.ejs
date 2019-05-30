@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>管理后台</title>
+	<link rel="stylesheet" href="../css/semantic.min.css">
+	<script src="../js/jquery-3.4.1.min.js"></script>
+	<script src="../js/semantic.min.js"></script>
+	<style>
+		img{
+			width: 50px;
+		}
+		.right .item {
+			margin: 0 -0.5em!important;
+		}
+		th,td{
+			text-align: center!important;
+		}
+		#page{
+			display: table;
+			margin: 20px auto;
+		}
+		#page a{
+			padding: 5px 10px;
+			border:1px solid #ddd;
+			color: #428bca;
+			margin: 0 2px;
+			border-radius: 4px;
+		}
+		#page a:hover{
+			background: #428bca;
+			color: #fff;
+			
+		}
+		#page a.active{
+			background: #428bca;
+			color: #fff;
+		}
+		#page span{
+			margin-left: 5px;
+		}
+	</style>
+</head>
+<body>
+	<div class="ui inverted segment"  style="margin-top: 0;">
+	    <div class="ui inverted secondary menu">
+	    	<a class="item"  href="/">Home</a>
+	    	<a class="item" href="/upload">上传数据</a>
+	    	<a target="__blank" href="" class="item">GitHub</a>
+		  	<div class="right menu">
+				<div class="ui item dropdown">
+			    	<div class="text">
+			    		<% if(session.user){ %>
+			    	  	<%= session.user %>
+							<% } %>
+			    	</div>
+			    	<i class="dropdown icon"></i>
+				    <div class="menu">
+				    	<div class="header">
+						    登出操作
+						    </div>
+						    <% if(session.user){ %>
+				    	  <a class="item" href="/signout">
+						    	登出
+						    </a>
+				    	   <% } %>
+				    	</div>
+				   </div>
+		  		</div>
+	  		</div>
+		</div>
+	</div>

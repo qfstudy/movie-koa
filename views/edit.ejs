@@ -1,0 +1,268 @@
+<% include header %>
+
+<div class="ui form segment" style="width: 60%;margin:0 auto 40px">
+  <div class="field">
+    <label>影视名称</label>
+    <input type="text" name="movieName" placeholder="影视名称" value="<%= movie.moviename %>">
+  </div>
+  <div class="fields equal width">
+    <div class="field">
+      <label>发行国家</label>
+      <select class="ui fluid search dropdown" name="movieCountry">
+        <option value="">发行国家</option>
+        <option value="中国">中国</option>
+        <option value="美国">美国</option>
+        <option value="英国">英国</option>
+        <option value="法国">法国</option>
+        <option value="日本">日本</option>
+        <option value="韩国">韩国</option>
+        <option value="印度">印度</option>
+        <option value="其他">其他</option>
+        <option selected value="<%= movie.country %>"><%= movie.country %></option>
+      </select>
+    </div>
+    <div class="six field">
+      <label>影视分类</label>
+      <select class="ui fluid search dropdown" name="movieClassify">
+        <option value="">影视分类</option>
+        <option value="电影">电影</option>
+        <option value="电视剧">电视剧</option>
+        <option value="综艺">综艺</option>
+        <option value="动漫">动漫</option>
+        <option value="其他">其他</option>
+        <option selected value="<%= movie.classification %>"><%= movie.classification %></option>
+      </select>
+    </div>
+    <div class="field">
+      <label>上映时间</label>
+      <input type="text" name="movieTime" placeholder="影视时间"  value="<%= movie.length %>">
+    </div>
+  </div>
+ 
+  <div class="fields">
+    <div class="field">
+     <label>封面图片</label>
+     <input type="hidden" name="coverImage" value="<%= movie.coverimage %>" class="OldCoverImage">
+     <input type="file" name="newFile" class="newCoverImage">
+    </div>
+  </div>
+  <div class="fields equal width">
+    <div class="field">
+      <label>语言</label>
+      <select class="ui fluid search dropdown" name="movieLanguage">
+        <option value="">影视语言</option>
+        <option value="中文">中文</option>
+        <option value="英语">英语</option>
+        <option value="日语">日语</option>
+        <option value="韩语">韩语</option>
+        <option value="法语">法语</option>
+        <option selected value="<%= movie.language %>"><%= movie.language %></option>
+      </select>
+    </div>
+    <div class="field">
+      <label>影视时长(分钟/季)</label>
+      <input type="text" name="movieLength" placeholder="影视时长"  value="<%= movie.length %>">
+    </div>
+    <div class="field">
+      <label>影视类型</label>
+      <select class="ui fluid search dropdown" name="movieType">
+        <option value="">影视类型</option>
+        <option value="动作">动作</option>
+        <option value="喜剧">喜剧</option>
+        <option value="爱情">爱情</option>
+        <option value="剧情">剧情</option>
+        <option value="古装">古装</option>
+        <option value="历史">历史</option>
+        <option value="战争">战争</option>
+        <option value="科幻">科幻</option>
+        <option value="惊悚">惊悚</option>
+        <option value="恐怖">恐怖</option>
+        <option value="冒险">冒险</option>
+        <option value="武侠">武侠</option>
+        <option value="动画">动画</option>
+        <option selected value="<%= movie.type %>"><%= movie.type %></option>
+      </select>
+    </div>
+  </div>
+  <div class=" fields">
+  </div>
+  <div class="field">
+    <div class="field">
+      <label>导演</label>
+      <input type="text" name="movieDirector" placeholder="导演"  value="<%= movie.director %>">
+    </div>
+  </div>
+  <div class="field">
+      <div class="field">
+        <label>主演</label>
+        <input type="text" name="movieActors" placeholder="演员" value="<%= movie.actors %>">
+      </div>
+    </div>
+  <div class="field">
+    <label>影视简介</label>
+   <textarea placeholder="影视描述" name="movieBrief"><%= movie.brief %></textarea>
+  </div>
+  <div class="ui button submit">Submit</div>
+</div>
+
+
+
+<script>
+  $(function(){
+    $('select.dropdown').dropdown()
+    let formdata = new FormData()
+    formdata.append('coverImage', $('.OldCoverImage').val())
+    $('.newCoverImage').change(function (e) {
+      let file=document.querySelector('.newCoverImage').files[0]
+      if(!/image/g.test(file.type)) {
+        alert('不是有效的图片文件!')
+        return
+      }
+      let reader = new FileReader()
+      reader.onload = function(e) {
+        let data = e.target.result 
+        formdata.append('newCoverImage', data)
+      }
+      reader.readAsDataURL(file)
+    })
+    var isAllow = true
+    if(!isAllow) return
+    $('.ui.form')
+    .form({
+      inline : true,
+      on  : 'blur',
+      onSuccess: function() {
+        isAllow = false;
+        ['movieName', 'movieTime', 'movieLength', 'movieDirector', 'movieActors'].forEach(function (val) {
+          formdata.append(val, $('input[name=' + val + ']').val())
+        });
+        ['movieCountry', 'movieClassify', 'movieLanguage', 'movieType'].forEach(function (val) {
+            formdata.append(val, $('select[name=' + val + ']').val())
+        });
+        formdata.append('movieBrief',$('textarea').val())
+        $.ajax({
+            url: location.pathname,
+            type: 'POST',
+            cache: false,
+            data: formdata,
+            processData: false,
+            contentType: false,
+            dataType: "json",
+            success: function (data) {
+                isAllow = true
+                if (data.code == 200) {
+                    alert('修改成功')
+                    location.href = '/'
+                    formdata = new FormData()
+                }else{
+                  alert('修改失败')  
+                  formdata = new FormData() 
+                }
+            }
+        });
+      },
+      fields: {
+        movieName: {
+          identifier: 'movieName',
+          rules: [
+            {
+              type   : 'empty',
+              prompt : '请输入名称！'
+            }
+          ]
+        },
+        country: {
+          identifier: 'movieCountry',
+          rules: [
+            {
+              type   : 'empty',
+              prompt : '请输入国家！'
+            }
+          ]
+        },
+        classify: {
+          identifier: 'movieClassify',
+          rules: [
+            {
+              type   : 'empty',
+              prompt : '请输入分类！'
+            }
+          ]
+        },
+        time: {
+          identifier: 'movieTime',
+          rules: [
+            {
+              type   : 'empty',
+              prompt : '请输入时间！'
+            }
+          ]
+        },
+        coverImage: {
+          identifier: 'coverImage',
+          rules: [
+            {
+              type   : 'empty',
+              prompt : '请上传图片！'
+            }
+          ]
+        },
+        language: {
+          identifier: 'movieLanguage',
+          rules: [
+            {
+              type   : 'empty',
+              prompt : '请输入语言！'
+            }
+          ]
+        },
+        length: {
+          identifier: 'movieLength',
+          rules: [
+            {
+              type   : 'empty',
+              prompt : '请输入时长！'
+            }
+          ]
+        },
+        type: {
+          identifier: 'movieType',
+          rules: [
+            {
+              type   : 'empty',
+              prompt : '请输入类型！'
+            }
+          ]
+        },
+        director: {
+          identifier: 'movieDirector',
+          rules: [
+            {
+              type   : 'empty',
+              prompt : '请输入导演！'
+            }
+          ]
+        },
+        actors: {
+          identifier: 'movieActors',
+          rules: [
+            {
+              type   : 'empty',
+              prompt : '请输入演员！'
+            }
+          ]
+        },
+        brief: {
+          identifier: 'movieBrief',
+          rules: [
+            {
+              type   : 'empty',
+              prompt : '请输入简介！'
+            }
+          ]
+        },  
+      }
+    })
+  })
+</script>
+<% include footer %>   
