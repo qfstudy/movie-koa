@@ -34,6 +34,7 @@ router.post('/movie/signup', koaBody(), async (ctx, next) => {
 					}
 				})
 		}).catch((error) => {
+			console.log('signup: ',error)
 			ctx.body = {
 				code: 400,
 				message: '注册失败',
@@ -176,12 +177,12 @@ router.post('/movie/getMovieById', koaBody(), async (ctx) => {
 // 获取分类列表的数据
 router.post('/movie/classifymovie', koaBody(), async (ctx, next) => {
   let classifyName=ctx.request.body.classifyName
-  let token = ctx.get('Authorization')
+  // let token = ctx.get('Authorization')
   // console.log('token: '+ token)
-  jwt.verify(token, config.jwt_secret, (err, decoded) => {
-    console.log('movie tv show')
-    console.log(decoded)
-  })
+  // jwt.verify(token, config.jwt_secret, (err, decoded) => {
+  //   console.log('movie tv show')
+  //   console.log(decoded)
+  // })
   await apiModel.findDataByClassify(classifyName).then(res => {
 		ctx.body = {
 			code: 200,
@@ -200,12 +201,12 @@ router.post('/movie/classifymovie', koaBody(), async (ctx, next) => {
 // 获取分类列表中的全部的数据
 router.post('/movie/classifyall', koaBody(),async (ctx, next) => {
   let table=ctx.request.body.table
-  let token = ctx.get('Authorization')
+  // let token = ctx.get('Authorization')
   // console.log('token: '+ token)
-  jwt.verify(token, config.jwt_secret, (err, decoded) => {
-    console.log('all')
-    console.log(decoded)
-  })
+  // jwt.verify(token, config.jwt_secret, (err, decoded) => {
+    // console.log('all')
+    // console.log(decoded)
+  // })
 	await apiModel.findData(table).then(res => {
 		ctx.body = {
 			code: 200,
@@ -315,8 +316,8 @@ router.post('/movie/edituserinfo', koaBody(), async (ctx, next) => {
 					apiModel.updateCommentUserName([newName, userName]),
 					apiModel.updateScoresUserName([newName, userName]),
 					apiModel.updateCollectionsUserName([newName, userName])
-				]).then(res => {
-					let newToken = jwt.sign({
+				]).then(async res => {
+					let newToken =await jwt.sign({
 						userName: newName
 					}, config.jwt_secret, {
 						expiresIn: '30 days'

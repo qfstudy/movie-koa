@@ -64,9 +64,9 @@ let users =`
     avatar VARCHAR(100) NOT NULL DEFAULT '' COMMENT '头像',
     time VARCHAR(20) NOT NULL DEFAULT '' COMMENT '注册时间',
     introduction VARCHAR(1000) DEFAULT '' COMMENT '个人简介',
-    github VARCHAR(100) COMMENT 'github网址',
-    blog VARCHAR(100) COMMENT '博客网址',
-    email VARCHAR(100) COMMENT '电子邮箱',
+    github VARCHAR(100) DEFAULT '' COMMENT 'github网址',
+    blog VARCHAR(100) DEFAULT '' COMMENT '博客网址',
+    email VARCHAR(100) DEFAULT '' COMMENT '电子邮箱',
     PRIMARY KEY ( id )
   )ENGINE=InnoDB DEFAULT CHARSET=utf8;`
   //alter table users drop column introduction; 
