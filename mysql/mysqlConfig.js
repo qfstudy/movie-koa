@@ -300,7 +300,7 @@ let increaseCollectionNum=(movieid)=>{
   let _sql = `update movies set collection = collection + 1 where id="${movieid}"`
   return query( _sql)
 }
-// 增加movies收藏数
+// 减少movies收藏数
 let reduceCollectionNum=(movieid)=>{
   let _sql = `update movies set collection = collection - 1 where id="${movieid}"`
   return query( _sql)
